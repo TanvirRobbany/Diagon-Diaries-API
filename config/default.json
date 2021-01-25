@@ -1,3 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://tanvir:diagondiaries@diagondiaries.fdu1e.mongodb.net/diagondiaries?retryWrites=true&w=majority"
+    "mongoURI": "mongodb+srv://tanvir:diagondiaries@diagondiaries.fdu1e.mongodb.net/diagondiaries?retryWrites=true&w=majority",
+    "jwtSecret": "secret"
 }
