@@ -58,20 +58,20 @@ async (req, res) => {
 //@desc      Add new books
 //@access    Private
 router.post('/issue',[ auth,
-    // check('bookTitle', 'Please add a book title').not().isEmpty(),
-    check('bookCode', 'Please add a book code').not().isEmpty(),
+    check('bookID', 'Please add a book id').not().isEmpty(),
+    check('userID', 'Please add a user id').not().isEmpty(),
 ], 
 async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
     }
-    const { bookCode, studentId} = req.body;
+    const { bookID, userID} = req.body;
     try {
         const newIssue = new Issue({
             // bookTitle: req.book.bookTitle,
-            bookCode,
-            studentId
+            bookID,
+            userID
         });
 
         // const book = await newBook.save();

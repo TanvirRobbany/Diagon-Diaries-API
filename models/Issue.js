@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 const IssueSchema = mongoose.Schema({
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
-    },
-    book: {
+    bookID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'books'
+    },
+    userID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
     },
     date: {
         type: Date,
