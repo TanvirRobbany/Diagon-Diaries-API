@@ -20,6 +20,19 @@ router.get('/', auth, async (req, res) => {
     }
 });
 
+//@route     GET api/books/issue
+//@desc      Get all issued books
+//@access    Private
+router.get('/issue', auth, async (req, res) => {
+    try {
+        const issue = await Issue.find().populate('bookID').populate('userID').sort({date: -1});
+        res.json(issue);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
 //@route     POST api/books
 //@desc      Add new books
 //@access    Private

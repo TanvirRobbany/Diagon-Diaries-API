@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const IssueSchema = mongoose.Schema({
     bookID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'books'
+        ref: 'book'
     },
     userID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'user'
     },
     date: {
         type: Date,
