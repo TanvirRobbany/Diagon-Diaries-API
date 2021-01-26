@@ -5,6 +5,7 @@ const {check, validationResult} = require('express-validator');
 
 const User = require('../models/Users');
 const Book = require('../models/Books');
+const Issue = require('../models/Issue');
 
 //@route     GET api/books
 //@desc      Get all books
@@ -47,6 +48,35 @@ async (req, res) => {
 
         const book = await newBook.save();
         res.json(book);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+//@route     POST api/books/issue
+//@desc      Add new books
+//@access    Private
+router.post('/issue',[ auth,
+    // check('bookTitle', 'Please add a book title').not().isEmpty(),
+    check('bookCode', 'Please add a book code').not().isEmpty(),
+], 
+async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({errors: errors.array()});
+    }
+    const { bookCode, studentId} = req.body;
+    try {
+        const newIssue = new Issue({
+            // bookTitle: req.book.bookTitle,
+            bookCode,
+            studentId
+        });
+
+        // const book = await newBook.save();
+        const issue = await newIssue.save();
+        res.json(issue);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
