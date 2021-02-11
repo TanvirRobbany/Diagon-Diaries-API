@@ -25,8 +25,8 @@ router.get('/', auth, async (req, res) => {
 //@access    Private
 router.get('/issue', auth, async (req, res) => {
     try {
-        const issue = await Issue.find().populate('bookID').populate('userID').sort({date: -1});
-        res.json(issue);
+        const issued = await Issue.find().populate("issue").sort({date: -1});
+        res.json(issued);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -80,13 +80,19 @@ async (req, res) => {
         return res.status(400).json({errors: errors.array()});
     }
     const { bookID, userID} = req.body;
+    const bookValidation = await Book.findOne({bookCode:bookID});
+    const userValidation = await User.findOne({studentID:userID})
+    console.log(bookValidation,userValidation)
+    if(bookValidation!==null && userValidation.length!==null){
     try {
+        const newBookId=  bookValidation._id;
+        const newUserId=   userValidation._id;
+
         const newIssue = new Issue({
             // bookTitle: req.book.bookTitle,
-            bookID,
-            userID
+            newBookId,
+            newUserId
         });
-
         // const book = await newBook.save();
         const issue = await newIssue.save();
         res.json(issue);
@@ -94,6 +100,10 @@ async (req, res) => {
         console.error(err.message);
         res.status(500).send('Server error');
     }
+}
+else{
+    res.status(400).send("User or Book not available")
+}
 });
 
 //@route     PUT api/books/:id

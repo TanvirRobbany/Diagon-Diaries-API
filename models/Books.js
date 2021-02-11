@@ -15,7 +15,8 @@ const BookSchema = mongoose.Schema({
     },
     bookCode: {
         type: String,
-        required: true
+        required: true,
+        Unique: true
     },
     category: {
         type: String,
