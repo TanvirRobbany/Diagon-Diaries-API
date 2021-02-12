@@ -25,7 +25,7 @@ router.get('/', auth, async (req, res) => {
 //@access    Private
 router.get('/issue', auth, async (req, res) => {
     try {
-        const issued = await Issue.find().populate("issue").sort({date: -1});
+        const issued = await Issue.find().populate("bookID").populate("userID").sort({date: -1});
         res.json(issued);
     } catch (err) {
         console.error(err.message);
@@ -90,8 +90,8 @@ async (req, res) => {
 
         const newIssue = new Issue({
             // bookTitle: req.book.bookTitle,
-            newBookId,
-            newUserId
+            bookID:newBookId,
+            userID:newUserId
         });
         // const book = await newBook.save();
         const issue = await newIssue.save();
@@ -147,6 +147,25 @@ router.delete('/:id', async (req, res) => {
 
         await Book.findByIdAndRemove(req.params.id);
         res.json({msg: 'Book removed'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
+//@route     DELETE api/books/issue/:id
+//@desc      Update book
+//@access    Private
+router.delete('/issue/:id', async (req, res) => {
+    try {
+        let issue = await Issue.findById(req.params.id);
+        
+        if(!issue) {
+            return res.status(404).json({msg: 'Issue not found'});
+        }
+
+        await Issue.findByIdAndRemove(req.params.id);
+        res.json({msg: 'Issue removed'});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
