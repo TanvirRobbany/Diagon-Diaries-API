@@ -18,10 +18,10 @@ router.post('/', [
     check('password', 'Enter a password with 6 or more characters').isLength({min: 6}),
 ], async (req, res) => {
     // res.send(req.body);
-    const errors = validationResult(req);
-    if(!errors.isEmpty()) {
-        return res.status(400).json({erros: errors.array()})
-    }
+    // const errors = validationResult(req);
+    // if(!errors.isEmpty()) {
+    //     return res.status(400).json({erros: errors.array()})
+    // }
 
     const {name, email, studentID, password} = req.body;
 

@@ -70,16 +70,22 @@ router.post('/', [auth,
 //@route     POST api/books/search
 //@desc      Find books
 //@access    Public
-router.post('/search', [
-    check('bookTitle', 'Please add a book title').not().isEmpty(),
-],
+router.post('/search', 
+// [
+//     check('bookTitle', 'Please add a book title').not().isEmpty(),
+// ],
     async (req, res) => {
         const {query} = req.body;
        
         // console.log(search);
 
             try {
-                const search = await Book.find({ bookTitle: { $regex: new RegExp(query) } });
+                const search = await Book.find({ $or: [{bookTitle: { $regex: new RegExp(query) }}, 
+                                                {authorName: { $regex: new RegExp(query) }},
+                                                {bookCode: { $regex: new RegExp(query) }}]});
+                // .find({ authorName: { $regex: new RegExp(query) } })
+                // .find({ bookCode: { $regex: new RegExp(query) } })
+                // .find({ quantity: { $regex: new RegExp(query) } });
                 res.json(search);
                 
             } catch (err) {
@@ -126,6 +132,30 @@ router.post('/issue', [auth,
             res.status(400).send("User or Book not available")
         }
     });
+
+//@route     POST api/books/issue/search
+//@desc      Find books
+//@access    Public
+// router.post('/issue/search', 
+// // [
+// //     check('bookTitle', 'Please add a book title').not().isEmpty(),
+// // ],
+//     async (req, res) => {
+//         const {query} = req.body;
+       
+//         // console.log(search);
+
+//             try {
+//                 const search = await Issue.populate("bookID").populate("userID").find({ $or: [{bookTitle: { $regex: new RegExp(query) }}, 
+//                     {studentID: { $regex: new RegExp(query) }},
+//                     {bookCode: { $regex: new RegExp(query) }}] });
+//                 res.json(search);
+                
+//             } catch (err) {
+//                 console.error(err.message);
+//                 res.status(500).send('Server error');
+//             }
+//     });
 
 //@route     PUT api/books/:id
 //@desc      Update book
