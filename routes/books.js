@@ -114,10 +114,12 @@ router.post('/issue', [auth,
             try {
                 const newBookId = bookValidation._id;
                 const newUserId = userValidation._id;
-
+                const newQuantity = newBookId.quantity - 1;
+                const quantity = newBookId.quantity;
                 const newIssue = new Issue({
                     // bookTitle: req.book.bookTitle,
                     bookID: newBookId,
+                    // {bookID.quantity}: newQuantity,
                     userID: newUserId
                 });
                 // const book = await newBook.save();
