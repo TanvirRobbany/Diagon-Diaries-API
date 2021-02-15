@@ -109,22 +109,29 @@ router.post('/issue', [auth,
         const { bookID, userID } = req.body;
         const bookValidation = await Book.findOne({ bookCode: bookID });
         const userValidation = await User.findOne({ studentID: userID })
+
         console.log(bookValidation, userValidation)
         if (bookValidation !== null && userValidation.length !== null) {
             try {
                 const newBookId = bookValidation._id;
                 const newUserId = userValidation._id;
-                const newQuantity = newBookId.quantity - 1;
-                const quantity = newBookId.quantity;
+                const newQuantity = bookValidation.quantity;
+                const quantity = newQuantity - 1;
+                let book = await Book.findById(newBookId);
+                console.log(quantity);
+                await Book.findByIdAndUpdate(bookValidation._id, {$set: {newQuantity: quantity}}, {new: true});
+                // console.log(book);
                 const newIssue = new Issue({
-                    // bookTitle: req.book.bookTitle,
                     bookID: newBookId,
-                    // {bookID.quantity}: newQuantity,
                     userID: newUserId
                 });
                 // const book = await newBook.save();
                 const issue = await newIssue.save();
+                // await Book.findByIdAndUpdate(newBookId, {$set: {newQuantity: quantity}}, {new: true});
                 res.json(issue);
+                console.log(bookValidation.quantity);
+                // console.log(issue);
+                // res.json(book);
             } catch (err) {
                 console.error(err.message);
                 res.status(500).send('Server error');
