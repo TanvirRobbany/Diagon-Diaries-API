@@ -221,14 +221,14 @@ router.put('/issue/:id', async (req, res) => {
         const date = Date.now();
         let issue = await Issue.findById(req.params.id);
         const book = await Issue.findById(req.params.id).populate("bookID");
-        // const newQuantity = issue.bookID.quantity;
+        const newQuantity = book.bookID.quantity + 1;
 
         if (!issue) {
             return res.status(404).json({ msg: 'Issue not found' });
         }
         console.log(issue);
-        console.log(book);
-        // await Book.findByIdAndUpdate()
+        console.log(newQuantity);
+        await Book.findByIdAndUpdate(book.bookID, {quantity: newQuantity})
         await Issue.findByIdAndUpdate(req.params.id, {isReceived: true, receivedDate: date});
         res.json({ msg: 'Issue Updated' });
     } catch (err) {
