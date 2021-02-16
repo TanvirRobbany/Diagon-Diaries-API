@@ -12,7 +12,7 @@ const Issue = require('../models/Issue');
 //@access    Private
 router.get('/', auth, async (req, res) => {
     try {
-        const books = await Book.find({ user: req.user.id }).sort({ date: -1 });
+        const books = await Book.find().sort({ date: -1 });
         res.json(books);
     } catch (err) {
         console.error(err.message);
@@ -115,11 +115,11 @@ router.post('/issue', [auth,
             try {
                 const newBookId = bookValidation._id;
                 const newUserId = userValidation._id;
-                const newQuantity = bookValidation.quantity;
-                const quantity = newQuantity - 1;
+                // const quantity = bookValidation.quantity;
+                const newQuantity = bookValidation.quantity - 1;
                 let book = await Book.findById(newBookId);
-                console.log(quantity);
-                await Book.findByIdAndUpdate(bookValidation._id, {$set: {newQuantity: quantity}}, {new: true});
+                console.log(newQuantity);
+                await Book.findByIdAndUpdate(bookValidation._id, {quantity: newQuantity});
                 // console.log(book);
                 const newIssue = new Issue({
                     bookID: newBookId,
@@ -213,19 +213,24 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-//@route     DELETE api/books/issue/:id
+//@route     PUT api/books/issue/:id
 //@desc      Update book
 //@access    Private
-router.delete('/issue/:id', async (req, res) => {
+router.put('/issue/:id', async (req, res) => {
     try {
+        const date = Date.now();
         let issue = await Issue.findById(req.params.id);
+        const book = await Issue.findById(req.params.id).populate("bookID");
+        // const newQuantity = issue.bookID.quantity;
 
         if (!issue) {
             return res.status(404).json({ msg: 'Issue not found' });
         }
-
-        await Issue.findByIdAndRemove(req.params.id);
-        res.json({ msg: 'Issue removed' });
+        console.log(issue);
+        console.log(book);
+        // await Book.findByIdAndUpdate()
+        await Issue.findByIdAndUpdate(req.params.id, {isReceived: true, receivedDate: date});
+        res.json({ msg: 'Issue Updated' });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

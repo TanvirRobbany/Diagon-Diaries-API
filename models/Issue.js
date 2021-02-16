@@ -12,6 +12,14 @@ const IssueSchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now()
+    },
+    isReceived: {
+        type: Boolean,
+        default: false
+    },
+    receivedDate: {
+        type: Date,
+        default: null
     }
 });
 
