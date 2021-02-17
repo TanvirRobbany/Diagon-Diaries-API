@@ -119,6 +119,7 @@ router.post('/issue', [auth,
                 const newQuantity = bookValidation.quantity - 1;
                 let book = await Book.findById(newBookId);
                 console.log(newQuantity);
+                if(bookValidation.quantity >= 1) {
                 await Book.findByIdAndUpdate(bookValidation._id, {quantity: newQuantity});
                 // console.log(book);
                 const newIssue = new Issue({
@@ -132,6 +133,10 @@ router.post('/issue', [auth,
                 console.log(bookValidation.quantity);
                 // console.log(issue);
                 // res.json(book);
+                }
+                else {
+                    res.status(400).json(false);
+                }
             } catch (err) {
                 console.error(err.message);
                 res.status(500).send('Server error');

@@ -7,6 +7,7 @@ const {check, validationResult} = require('express-validator');
 const auth = require('../middleware/auth');
 const config = require('config');
 const User = require('../models/Users');
+const { route } = require('./books');
 
 //@route     GET api/auth
 //@desc      Get logged in user
@@ -58,12 +59,16 @@ router.post('/', [
 
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 360000}, (err, token) => {
             if (err) throw err;
-            res.json({token, isAdmin: user.isAdmin, userID: user._id});
+            res.json({token, isAdmin: user.isAdmin, userID: user._id, userName: user.name, userId: user.studentID});
         });
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
     }
 })
+
+router.get('/checkauth',[auth], (req, res) => {
+    res.json(true);
+});
 
 module.exports = router;
