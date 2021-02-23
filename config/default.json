@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://tanvir:diagondiaries@diagondiaries.fdu1e.mongodb.net/diagondiaries?retryWrites=true&w=majority",
+    "mongoURI": "ADD YOUR MongoDB DATABASE URI HERE OR YOU CAN ALSO CONNECT LOCALLY",
     "jwtSecret": "secret"
 }
