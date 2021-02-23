@@ -10,4 +10,4 @@ npm install
 npm run server
 ```
 
-### Use your mongoDB database connection URI in config file or you also connect loccaly
+### Use your mongoDB database connection URI in config file or you can also connect locally
